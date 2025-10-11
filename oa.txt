@@ -1,0 +1,234 @@
+local players = game:GetService("Players")
+local player = players.LocalPlayer
+local teams = game:GetService("Teams")
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+
+-- Load modern library
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/PresidentZuyi/S/refs/heads/main/C"))()
+
+MakeWindow({
+  Hub = {
+    Title = "FmcStore Official Hub 🚀",
+    Animation = "Premium Experience 🔥",
+    Theme = "Modern",
+    BackgroundColor = Color3.fromRGB(10, 15, 30),
+    AccentColor = Color3.fromRGB(0, 150, 255),
+    Gradient = true
+  },
+  Key = {
+    KeySystem = true,
+    Title = "🔐 FmcStore Premium Access",
+    Description = "Blue Lock Rivals - Ultimate Edition",
+    KeyLink = "https://discord.gg/72q5yvpfEJ",
+    Keys = {"Fmcexecutive", "Fmc", "123", "1", "28282"},
+    InputBox = {
+      BackgroundColor = Color3.fromRGB(20, 25, 45),
+      TextColor = Color3.fromRGB(255, 255, 255),
+      PlaceholderColor = Color3.fromRGB(150, 150, 180)
+    },
+    Notifi = {
+      Notifications = true,
+      CorrectKey = "🎉 Access Granted! Welcome to FmcStore!",
+      Incorrectkey = "❌ Invalid Key! Please check again.",
+      CopyKeyLink = "📋 Discord Link Copied!"
+    }
+  }
+})
+
+-- Modern minimize button with icon
+MinimizeButton({
+  Image = "rbxassetid://107349794532",
+  Size = {35, 35},
+  Color = Color3.fromRGB(15, 20, 40),
+  Corner = true,
+  Stroke = true,
+  StrokeColor = Color3.fromRGB(0, 180, 255),
+  HoverColor = Color3.fromRGB(25, 30, 55)
+})
+
+-- Premium notification
+MakeNotifi({
+  Title = "⚡ Executed Successfully!",
+  Text = "FmcStore Hub Activated!",
+  Time = 5,
+  Icon = "rbxassetid://107349794532"
+})
+
+-- Main tab with modern design
+local MainTab = MakeTab({
+  Name = "🏠 Main Hub",
+  Icon = "rbxassetid://107349794532",
+  Color = Color3.fromRGB(0, 150, 255)
+})
+
+-- Header with logo
+local HeaderImage = AddImageLabel(MainTab, {
+  Name = "PremiumHeader",
+  Image = "rbxassetid://7229442422",
+  Size = {200, 80},
+  Corner = true,
+  Stroke = true,
+  StrokeColor = Color3.fromRGB(0, 180, 255)
+})
+
+-- Section for abilities
+AddLabel(MainTab, {
+  Text = "🎮 Ability Modifications",
+  Color = Color3.fromRGB(0, 200, 255),
+  Size = 18
+})
+
+-- No Cooldown button with premium style
+AddButton(MainTab, {
+  Name = "⚡ No Ability Cooldown",
+  Callback = function()
+    local AbilityController = require(cloneref(game:GetService("ReplicatedStorage")).Controllers.AbilityController)
+    local OriginalAbilityCooldown; 
+    OriginalAbilityCooldown = hookfunction(AbilityController.AbilityCooldown, function(Self)
+      return
+    end)
+
+    MakeNotifi({
+      Title = "✅ No Cooldown Activated",
+      Text = "Abilities now have no cooldown!",
+      Time = 5
+    })
+  end,
+  Color = Color3.fromRGB(0, 120, 255),
+  HoverColor = Color3.fromRGB(0, 180, 255)
+})
+
+-- GK Expander button
+AddButton(MainTab, {
+  Name = "🥅 GK Ball Expander",
+  Callback = function()
+    loadstring(game:HttpGet("https://pastebin.com/raw/T5m4nwPq"))()
+    
+    MakeNotifi({
+      Title = "✅ GK Expander Activated",
+      Text = "Goalkeeper ball expanded!",
+      Time = 5
+    })
+  end,
+  Color = Color3.fromRGB(0, 120, 255),
+  HoverColor = Color3.fromRGB(0, 180, 255)
+})
+
+-- New features section
+AddLabel(MainTab, {
+  Text = "✨ Premium Features",
+  Color = Color3.fromRGB(0, 200, 255),
+  Size = 18
+})
+
+-- Additional premium buttons
+AddButton(MainTab, {
+  Name = "🌟 Auto Win",
+  Callback = function()
+    MakeNotifi({
+      Title = "🚧 Coming Soon",
+      Text = "This feature is in development!",
+      Time = 5
+    })
+  end,
+  Color = Color3.fromRGB(40, 40, 80),
+  HoverColor = Color3.fromRGB(60, 60, 120)
+})
+
+AddButton(MainTab, {
+  Name = "🎯 Aim Assist",
+  Callback = function()
+    MakeNotifi({
+      Title = "🚧 Coming Soon",
+      Text = "This feature is in development!",
+      Time = 5
+    })
+  end,
+  Color = Color3.fromRGB(40, 40, 80),
+  HoverColor = Color3.fromRGB(60, 60, 120)
+})
+
+-- Player tab for player modifications
+local PlayerTab = MakeTab({
+  Name = "👤 Player",
+  Icon = "rbxassetid://107349825143",
+  Color = Color3.fromRGB(0, 200, 150)
+})
+
+AddLabel(PlayerTab, {
+  Text = "Player Modifications",
+  Color = Color3.fromRGB(0, 200, 150),
+  Size = 18
+})
+
+AddButton(PlayerTab, {
+  Name = "💨 Speed Boost",
+  Callback = function()
+    MakeNotifi({
+      Title = "🚧 Coming Soon",
+      Text = "This feature is in development!",
+      Time = 5
+    })
+  end
+})
+
+AddButton(PlayerTab, {
+  Name = "🦘 Jump Boost",
+  Callback = function()
+    MakeNotifi({
+      Title = "🚧 Coming Soon",
+      Text = "This feature is in development!",
+      Time = 5
+    })
+  end
+})
+
+-- Settings tab
+local SettingsTab = MakeTab({
+  Name = "⚙️ Settings",
+  Icon = "rbxassetid://107349845621",
+  Color = Color3.fromRGB(180, 180, 50)
+})
+
+AddLabel(SettingsTab, {
+  Text = "UI Customization",
+  Color = Color3.fromRGB(180, 180, 50),
+  Size = 18
+})
+
+AddButton(SettingsTab, {
+  Name = "🎨 Change Theme",
+  Callback = function()
+    MakeNotifi({
+      Title = "Theme Changer",
+      Text = "Theme customization panel opened!",
+      Time = 5
+    })
+  end
+})
+
+AddButton(SettingsTab, {
+  Name = "📱 Toggle UI",
+  Callback = function()
+    MakeNotifi({
+      Title = "UI Toggled",
+      Text = "Interface visibility changed!",
+      Time = 3
+    })
+  end
+})
+
+-- Footer information
+AddLabel(MainTab, {
+  Text = "FmcStore Premium • v2.0 • Licensed",
+  Color = Color3.fromRGB(100, 100, 150),
+  Size = 12
+})
+
+-- Initial welcome notification
+MakeNotifi({
+  Title = "🎉 Welcome to FmcStore!",
+  Text = "Premium UI Loaded Successfully!",
+  Time = 8
+})

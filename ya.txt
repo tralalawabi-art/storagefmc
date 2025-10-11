@@ -1,0 +1,194 @@
+local players = game:GetService("Players")
+local player = players.LocalPlayer
+local TweenService = game:GetService("TweenService")
+
+-- Load modern UI library
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/PresidentZuyi/S/refs/heads/main/C"))()
+
+-- Ultra Modern Color Scheme
+local NEON_BLUE = Color3.fromRGB(0, 255, 255)
+local DARK_SPACE = Color3.fromRGB(10, 15, 30)
+void PURPLE = Color3.fromRGB(138, 43, 226)
+local GOLD_ACCENT = Color3.fromRGB(255, 215, 0)
+local MATRIX_GREEN = Color3.fromRGB(0, 255, 0)
+
+-- Create Ultra Premium Window
+MakeWindow({
+    Hub = {
+        Title = "⚡ FMCSTORE ULTRA PREMIUM ⚡",
+        Animation = "NEON MODE ACTIVATED 🔥",
+        BackgroundColor = DARK_SPACE,
+        HeaderColor = NEON_BLUE,
+        TextColor = Color3.fromRGB(255, 255, 255),
+        HeaderGradient = true,
+        BlurBackground = true,
+        GlowEffect = true
+    },
+    Key = {
+        KeySystem = true,
+        Title = "🔐 ULTRA SECURE ACCESS",
+        Description = "ENTER PREMIUM KEY TO UNLOCK",
+        KeyLink = "https://discord.gg/72q5yvpfEJ",
+        Keys = {"Fmcexecutive", "Fmc", "123", "1", "28282"},
+        InputBoxColor = Color3.fromRGB(20, 25, 45),
+        ButtonColor = NEON_BLUE,
+        TextColor = Color3.fromRGB(255, 255, 255),
+        InputGlow = true,
+        ButtonHoverColor = PURPLE,
+        Notifi = {
+            Notifications = true,
+            CorrectKey = "⚡ ACCESS GRANTED - WELCOME ELITE USER! ⚡",
+            Incorrectkey = "🚫 ACCESS DENIED - INVALID CREDENTIALS",
+            CopyKeyLink = "📋 DISCORD LINK COPIED TO CLIPBOARD"
+        }
+    }
+})
+
+-- Animated Minimize Button
+MinimizeButton({
+    Image = "rbxassetid://10734996328845", -- Modern icon
+    Size = {50, 50},
+    Color = DARK_SPACE,
+    Corner = true,
+    Stroke = true,
+    StrokeColor = NEON_BLUE,
+    StrokeThickness = 2,
+    HoverColor = PURPLE,
+    GlowEffect = true
+})
+
+-- Premium Notification with animation
+MakeNotifi({
+    Title = "🚀 SYSTEM BOOT COMPLETE",
+    Text = "FMCSTORE ULTRA PREMIUM LOADED!",
+    Time = 5,
+    BackgroundColor = DARK_SPACE,
+    TextColor = NEON_BLUE,
+    BorderColor = PURPLE
+})
+
+-- Create Main Tab with Premium Design
+local PremiumTab = MakeTab({
+    Name = "🎮 ELITE FEATURES",
+    Color = NEON_BLUE,
+    Icon = "⚡"
+})
+
+-- Premium Header with modern image
+local PremiumHeader = AddImageLabel(PremiumTab, {
+    Name = "FMCSTORE ELITE",
+    Image = "rbxassetid://10734996328845", -- Modern abstract icon
+    Size = {180, 180},
+    Corner = true,
+    StrokeColor = NEON_BLUE,
+    StrokeThickness = 3
+})
+
+-- Feature 1: No Cooldown with premium design
+AddButton(PremiumTab, {
+    Name = "⚡ INFINITE ABILITIES",
+    Description = "Remove all ability cooldowns • Elite Feature",
+    Callback = function()
+        local AbilityController = require(cloneref(game:GetService("ReplicatedStorage")).Controllers.AbilityController)
+        local OriginalAbilityCooldown; 
+        OriginalAbilityCooldown = hookfunction(AbilityController.AbilityCooldown, function(Self)
+            return
+        end)
+
+        -- Premium notification
+        MakeNotifi({
+            Title = "✅ COOLDOWN ELIMINATED",
+            Text = "All abilities now have INFINITE usage!",
+            Time = 5,
+            BackgroundColor = DARK_SPACE,
+            TextColor = MATRIX_GREEN
+        })
+    end
+})
+
+-- Feature 2: GK Expander with premium design
+AddButton(PremiumTab, {
+    Name = "🎯 ULTRA GK EXPANDER",
+    Description = "Massive goalkeeper ball expansion • Pro Feature",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/T5m4nwPq"))()
+
+        MakeNotifi({
+            Title = "✅ GK EXPANSION ACTIVATED",
+            Text = "Goalkeeper sphere massively expanded!",
+            Time = 5,
+            BackgroundColor = DARK_SPACE,
+            TextColor = GOLD_ACCENT
+        })
+    end
+})
+
+-- Premium Status Section
+local StatusSection = AddSection(PremiumTab, {
+    Name = "📊 ELITE SYSTEM STATUS",
+    TextColor = NEON_BLUE
+})
+
+AddLabel(StatusSection, {
+    Text = "🟢 SYSTEM: ONLINE & SECURE",
+    Color = MATRIX_GREEN
+})
+
+AddLabel(StatusSection, {
+    Text = "⚡ PERFORMANCE: MAXIMUM",
+    Color = NEON_BLUE
+})
+
+AddLabel(StatusSection, {
+    Text = "🔒 SECURITY: ENCRYPTED",
+    Color = GOLD_ACCENT
+})
+
+-- Premium Footer
+AddParagraph(PremiumTab, {
+    "💎 FMCSTORE ULTRA PREMIUM EDITION",
+    "🎯 Professional Gaming Enhancements"
+})
+
+-- Additional Premium Features Section
+local AdvancedSection = AddSection(PremiumTab, {
+    Name = "🚀 ADVANCED FEATURES",
+    TextColor = PURPLE
+})
+
+AddButton(PremiumTab, {
+    Name = "🌟 AUTO FARM XP [COMING SOON]",
+    Description = "Automated experience farming system",
+    Callback = function()
+        MakeNotifi({
+            Title = "🔧 FEATURE IN DEVELOPMENT",
+            Text = "Advanced XP farm system coming next update!",
+            Time = 5,
+            BackgroundColor = DARK_SPACE,
+            TextColor = PURPLE
+        })
+    end
+})
+
+AddButton(PremiumTab, {
+    Name = "💫 SUPER SPEED [COMING SOON]",
+    Description = "Ultra movement speed enhancement",
+    Callback = function()
+        MakeNotifi({
+            Title = "🔧 FEATURE IN DEVELOPMENT",
+            Text = "Speed enhancement system in development!",
+            Time = 5,
+            BackgroundColor = DARK_SPACE,
+            TextColor = NEON_BLUE
+        })
+    end
+})
+
+-- Final Premium Touch
+MakeNotifi({
+    Title = "🎉 WELCOME TO ELITE CLUB",
+    Text = "Enjoy premium features and enhanced gameplay!",
+    Time = 8,
+    BackgroundColor = DARK_SPACE,
+    TextColor = GOLD_ACCENT
+})

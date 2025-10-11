@@ -1,0 +1,177 @@
+local players = game:GetService("Players")
+local player = players.LocalPlayer
+local teams = game:GetService("Teams")
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+
+-- Load modern UI library
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Robobo2022/riczui/main/Lib"))()
+
+-- Modern color scheme
+local ACCENT_COLOR = Color3.fromRGB(0, 150, 255)
+local SECONDARY_COLOR = Color3.fromRGB(40, 40, 45)
+local BACKGROUND_COLOR = Color3.fromRGB(25, 25, 30)
+local TEXT_COLOR = Color3.fromRGB(240, 240, 240)
+
+local Window = library:CreateWindow({
+    Title = "FmcStore Official Hub",
+    SubTitle = "Blue Lock Rivals • Premium Edition",
+    Theme = {
+        Accent = ACCENT_COLOR,
+        Background = BACKGROUND_COLOR,
+        Side = SECONDARY_COLOR
+    },
+    Size = UDim2.new(0, 500, 0, 450)
+})
+
+-- Enhanced Key System with modern design
+local KeyTab = Window:CreateTab("🔐 Authentication")
+KeyTab:AddSection("Premium Access Required")
+
+local KeyInput = KeyTab:AddInput("Enter Key", {
+    Placeholder = "Paste your key here...",
+    ClearOnFocus = true
+})
+
+local KeyStatus = KeyTab:AddLabel("Status: ❌ Not Authenticated")
+
+KeyTab:AddButton("Get Key from Discord", function()
+    setclipboard("https://discord.gg/72q5yvpfEJ")
+    library:Notify("Discord link copied to clipboard!", 3)
+end)
+
+local AuthButton = KeyTab:AddButton("Authenticate", function()
+    local validKeys = {"Fmcexecutive", "Fmc", "123", "1", "28282"}
+    local inputKey = KeyInput.Value
+    
+    if table.find(validKeys, inputKey) then
+        KeyStatus:Set("Status: ✅ Authenticated")
+        library:Notify("Welcome! Access granted successfully", 5)
+        
+        -- Enable other tabs after successful authentication
+        MainTab:Show()
+        SettingsTab:Show()
+        
+        -- Hide key tab
+        KeyTab:Hide()
+    else
+        KeyStatus:Set("Status: ❌ Invalid Key")
+        library:Notify("Invalid key! Please check and try again", 3)
+    end
+end)
+
+-- Main Features Tab
+local MainTab = Window:CreateTab("🎮 Main Features")
+MainTab:Hide()
+
+local AbilitiesSection = MainTab:AddSection("Player Abilities")
+
+AbilitiesSection:AddButton("🚀 No Ability Cooldown", function()
+    local AbilityController = require(cloneref(game:GetService("ReplicatedStorage")).Controllers.AbilityController)
+    local OriginalAbilityCooldown; 
+    OriginalAbilityCooldown = hookfunction(AbilityController.AbilityCooldown, function(Self)
+        return
+    end)
+
+    library:Notify("No Cooldown Activated! All abilities ready!", 5)
+end)
+
+local GKSection = MainTab:AddSection("Goalkeeper Features")
+
+GKSection:AddButton("⚽ GK Ball Expander", function()
+    loadstring(game:HttpGet("https://pastebin.com/raw/T5m4nwPq"))()
+    library:Notify("GK Ball Expander Activated!", 5)
+end)
+
+-- Visual Enhancements Section
+local VisualSection = MainTab:AddSection("Visual Enhancements")
+
+VisualSection:AddToggle("HD Graphics", {
+    Flag = "HDGraphics",
+    Default = false
+}, function(value)
+    if value then
+        -- Enable better graphics
+        settings().Rendering.QualityLevel = 21
+    else
+        settings().Rendering.QualityLevel = 10
+    end
+end)
+
+VisualSection:AddSlider("FPS Boost", {
+    Min = 60,
+    Max = 240,
+    Default = 60,
+    Suffix = "FPS"
+}, function(value)
+    setfpscap(value)
+end)
+
+-- Settings Tab
+local SettingsTab = Window:CreateTab("⚙️ Settings")
+SettingsTab:Hide()
+
+local UISection = SettingsTab:AddSection("UI Customization")
+
+local AccentPicker = UISection:AddColorpicker("Accent Color", {
+    Default = ACCENT_COLOR,
+    Flag = "AccentColor"
+}, function(color)
+    Window:UpdateTheme("Accent", color)
+end)
+
+UISection:AddDropdown("UI Theme", {
+    Options = {"Dark", "Darker", "Midnight", "Cyber"},
+    Default = "Dark",
+    Flag = "UITheme"
+}, function(selection)
+    local themes = {
+        Dark = {Accent = ACCENT_COLOR, Background = Color3.fromRGB(30, 30, 35), Side = Color3.fromRGB(45, 45, 50)},
+        Darker = {Accent = ACCENT_COLOR, Background = Color3.fromRGB(20, 20, 25), Side = Color3.fromRGB(35, 35, 40)},
+        Midnight = {Accent = Color3.fromRGB(0, 255, 200), Background = Color3.fromRGB(15, 15, 20), Side = Color3.fromRGB(25, 25, 35)},
+        Cyber = {Accent = Color3.fromRGB(255, 0, 150), Background = Color3.fromRGB(10, 10, 20), Side = Color3.fromRGB(30, 20, 40)}
+    }
+    
+    if themes[selection] then
+        Window:UpdateTheme("Accent", themes[selection].Accent)
+        Window:UpdateTheme("Background", themes[selection].Background)
+        Window:UpdateTheme("Side", themes[selection].Side)
+    end
+end)
+
+-- Info Tab (always visible)
+local InfoTab = Window:CreateTab("ℹ️ Info")
+
+InfoTab:AddSection("FmcStore Hub v2.0")
+InfoTab:AddLabel("Premium UI Redesign")
+InfoTab:AddLabel("Enhanced Performance")
+InfoTab:AddLabel("Modern Aesthetics")
+
+InfoTab:AddButton("Join Discord", function()
+    setclipboard("https://discord.gg/72q5yvpfEJ")
+    library:Notify("Discord link copied!", 3)
+end)
+
+-- Initialize with modern notifications
+library:Notify("FmcStore Premium UI Loaded!", 5)
+
+-- Auto-hide main tabs until authenticated
+MainTab:Hide()
+SettingsTab:Hide()
+
+-- Add some visual effects
+spawn(function()
+    while wait(5) do
+        -- Subtle UI animations
+        for _, element in pairs(Window.Elements) do
+            if element.Instance and element.Instance:IsA("Frame") then
+                local tween = TweenService:Create(
+                    element.Instance,
+                    TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                    {BackgroundColor3 = element.Instance.BackgroundColor3:Lerp(Color3.fromRGB(255, 255, 255), 0.02)}
+                )
+                tween:Play()
+            end
+        end
+    end
+end)
