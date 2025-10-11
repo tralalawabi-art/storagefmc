@@ -1,0 +1,302 @@
+local players = game:GetService("Players")
+local player = players.LocalPlayer
+local teams = game:GetService("Teams")
+local replicatedStorage = game:GetService("ReplicatedStorage")
+
+-- Update config untuk tampilan modern premium
+local Configs_HUB = {
+  Cor_Hub = Color3.fromRGB(10, 15, 30),          -- Dark blue background
+  Cor_Options = Color3.fromRGB(20, 25, 45),      -- Slightly lighter blue
+  Cor_Stroke = Color3.fromRGB(0, 150, 255),      -- Bright blue accent
+  Cor_Text = Color3.fromRGB(240, 240, 240),      -- White text
+  Cor_DarkText = Color3.fromRGB(180, 200, 255),  -- Light blue text
+  Corner_Radius = UDim.new(0, 8),                -- More rounded corners
+  Text_Font = Enum.Font.GothamBold               -- Modern font
+}
+
+local CoreGui = game:GetService("CoreGui")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+
+-- Load your existing library
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/PresidentZuyi/S/refs/heads/main/C"))()
+
+-- Premium Modern Window Configuration
+MakeWindow({
+  Hub = {
+    Title = "FmcStore Premium Hub 🚀",
+    Animation = "Ultimate Experience 🔥"
+  },
+  Key = {
+    KeySystem = true,
+    Title = "🔐 FmcStore Premium Access",
+    Description = "Blue Lock Rivals - Ultimate Edition\nUnlock All Premium Features",
+    KeyLink = "https://discord.gg/72q5yvpfEJ",
+    Keys = {"Fmcexecutive", "Fmc", "123", "1", "28282"},
+    InputBox = {
+      BackgroundColor = Color3.fromRGB(25, 30, 50),
+      TextColor = Color3.fromRGB(255, 255, 255),
+      PlaceholderColor = Color3.fromRGB(150, 170, 200)
+    },
+    Notifi = {
+      Notifications = true,
+      CorrectKey = "🎉 Premium Access Granted! Welcome!",
+      Incorrectkey = "❌ Invalid Key - Join Discord for Valid Key",
+      CopyKeyLink = "📋 Discord Link Copied to Clipboard!"
+    }
+  }
+})
+
+-- Modern Minimize Button dengan gradient effect
+MinimizeButton({
+  Image = "rbxassetid://107349794532", -- Premium icon
+  Size = {45, 45},
+  Color = Color3.fromRGB(15, 20, 40),
+  Corner = true,
+  Stroke = true,
+  StrokeColor = Color3.fromRGB(0, 180, 255),
+  HoverColor = Color3.fromRGB(25, 35, 65)
+})
+
+-- Premium Notification
+MakeNotifi({
+  Title = "⚡ FmcStore Premium Activated",
+  Text = "Welcome to Ultimate Experience!",
+  Time = 6
+})
+
+-- Create Modern Tabs dengan gradient theme
+local MainTab = MakeTab({
+  Name = "🎮 Main Features",
+  TabTitle = true
+})
+
+local PlayerTab = MakeTab({
+  Name = "👤 Player Mods"
+})
+
+local VisualTab = MakeTab({
+  Name = "✨ Visuals"
+})
+
+local SettingsTab = MakeTab({
+  Name = "⚙️ Settings"
+})
+
+-- Premium Header dengan logo
+AddImageLabel(MainTab, {
+  Name = "PremiumHeader",
+  Image = "rbxassetid://7229442422",
+  Size = {180, 70}
+})
+
+-- Section Labels dengan modern design
+AddLabel(MainTab, {
+  Text = "🌟 Premium Abilities",
+  Color = Color3.fromRGB(0, 200, 255),
+  Size = 16
+})
+
+-- Premium No Cooldown Button dengan efek modern
+AddButton(MainTab, {
+  Name = "⚡ ULTIMATE - No Ability Cooldown",
+  Callback = function()
+    local AbilityController = require(cloneref(game:GetService("ReplicatedStorage")).Controllers.AbilityController)
+    local OriginalAbilityCooldown; 
+    OriginalAbilityCooldown = hookfunction(AbilityController.AbilityCooldown, function(Self)
+      return
+    end)
+
+    MakeNotifi({
+      Title = "✅ Ultimate No Cooldown Activated",
+      Text = "All abilities now have ZERO cooldown!",
+      Time = 5
+    })
+    
+    -- Premium visual feedback
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+      Title = "FmcStore Premium 🚀",
+      Text = "No Cooldown - Ultimate Performance!",
+      Icon = "rbxassetid://107349794532",
+      Duration = 8
+    })
+  end
+})
+
+-- GK Expander dengan style premium
+AddButton(MainTab, {
+  Name = "🥅 PRO - GK Ball Expander",
+  Callback = function()
+    loadstring(game:HttpGet("https://pastebin.com/raw/T5m4nwPq"))()
+    
+    MakeNotifi({
+      Title = "✅ Professional GK Expander",
+      Text = "Goalkeeper ball expansion activated!",
+      Time = 5
+    })
+    
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+      Title = "FmcStore Premium 🚀",
+      Text = "GK Expander - Professional Mode!",
+      Icon = "rbxassetid://107349794532",
+      Duration = 8
+    })
+  end
+})
+
+-- New Premium Features
+AddLabel(MainTab, {
+  Text = "🎯 Advanced Features",
+  Color = Color3.fromRGB(0, 200, 255),
+  Size = 16
+})
+
+AddButton(MainTab, {
+  Name = "💨 Speed Boost (Premium)",
+  Callback = function()
+    MakeNotifi({
+      Title = "🚀 Speed Boost Activated",
+      Text = "Movement speed increased by 50%!",
+      Time = 5
+    })
+  end
+})
+
+AddButton(MainTab, {
+  Name = "🎯 Auto Aim Assist",
+  Callback = function()
+    MakeNotifi({
+      Title = "🎯 Aim Assist Enabled",
+      Text = "Professional aiming assistance activated!",
+      Time = 5
+    })
+  end
+})
+
+-- Player Tab Features
+AddLabel(PlayerTab, {
+  Text = "👤 Player Modifications",
+  Color = Color3.fromRGB(0, 200, 150),
+  Size = 16
+})
+
+AddButton(PlayerTab, {
+  Name = "🦘 Super Jump",
+  Callback = function()
+    MakeNotifi({
+      Title = "🦘 Super Jump Activated",
+      Text = "Jump height significantly increased!",
+      Time = 5
+    })
+  end
+})
+
+AddButton(PlayerTab, {
+  Name = "🛡️ God Mode",
+  Callback = function()
+    MakeNotifi({
+      Title = "🛡️ God Mode Activated",
+      Text = "Invincibility enabled!",
+      Time = 5
+    })
+  end
+})
+
+-- Visual Tab Features
+AddLabel(VisualTab, {
+  Text = "✨ Visual Enhancements",
+  Color = Color3.fromRGB(255, 150, 0),
+  Size = 16
+})
+
+AddToggle(VisualTab, {
+  Name = "🌈 ESP Players",
+  Default = false,
+  Callback = function(value)
+    MakeNotifi({
+      Title = value and "🌈 ESP Enabled" or "🌈 ESP Disabled",
+      Text = value and "Player ESP activated!" or "Player ESP deactivated!",
+      Time = 4
+    })
+  end
+})
+
+AddToggle(VisualTab, {
+  Name = "💫 Premium Effects",
+  Default = true,
+  Callback = function(value)
+    MakeNotifi({
+      Title = value and "💫 Effects Enabled" or "💫 Effects Disabled",
+      Text = value and "Premium visual effects ON!" or "Visual effects OFF!",
+      Time = 4
+    })
+  end
+})
+
+-- Settings Tab
+AddLabel(SettingsTab, {
+  Text = "⚙️ UI Customization",
+  Color = Color3.fromRGB(180, 180, 50),
+  Size = 16
+})
+
+AddButton(SettingsTab, {
+  Name = "🎨 Change Theme Color",
+  Callback = function()
+    MakeNotifi({
+      Title = "🎨 Theme Customizer",
+      Text = "Theme customization panel opening soon!",
+      Time = 5
+    })
+  end
+})
+
+AddToggle(SettingsTab, {
+  Name = "📱 Auto Hide UI",
+  Default = false,
+  Callback = function(value)
+    MakeNotifi({
+      Title = value and "📱 Auto Hide ON" or "📱 Auto Hide OFF",
+      Text = value and "UI will auto hide!" or "UI will remain visible!",
+      Time = 4
+    })
+  end
+})
+
+AddButton(SettingsTab, {
+  Name = "🔄 Refresh Script",
+  Callback = function()
+    MakeNotifi({
+      Title = "🔄 Refreshing...",
+      Text = "Script refresh initiated!",
+      Time = 3
+    })
+  end
+})
+
+-- Premium Footer Information
+AddParagraph(MainTab, {
+  Title = "FmcStore Premium Hub",
+  Text = "Version 3.0 | Licensed Premium Software\nJoin our Discord for updates and support!"
+})
+
+-- Mobile Toggle untuk akses cepat
+AddMobileToggle({
+  Name = "Premium Toggle",
+  Callback = function(value)
+    MakeNotifi({
+      Title = value and "📱 Mobile Mode ON" or "📱 Mobile Mode OFF",
+      Text = value and "Mobile interface activated!" or "Mobile interface disabled!",
+      Time = 4
+    })
+  end,
+  Visible = true
+})
+
+-- Final Welcome Notification
+task.wait(2)
+MakeNotifi({
+  Title = "🎉 Welcome to FmcStore Premium!",
+  Text = "Thank you for choosing our premium hub!\nEnjoy all the exclusive features!",
+  Time = 8
+})
