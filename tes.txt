@@ -1,0 +1,82 @@
+local players = game:GetService("Players")
+local player = players.LocalPlayer
+local teams = game:GetService("Teams")
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/PresidentZuyi/S/refs/heads/main/C"))()
+
+MakeWindow({
+  Hub = {
+    Title = "FmcStore Official Hub (¥)",
+    Animation = "Enjoy!🔥👀"
+  },
+  Key = {
+    KeySystem = true,
+    Title = "FmcStore Official Hub 😉🐐",
+    Description = "^ Blue Lock Rivals (Updated)^",
+    KeyLink = "https://discord.gg/72q5yvpfEJ",
+    Keys = {"Fmcexecutive", "Fmc", "123", "1", "28282"},
+    Notifi = {
+      Notifications = true,
+      CorrectKey = "Correct✅",
+      Incorrectkey = "False, Salah Tolol Passwordnya😡‼️",
+      CopyKeyLink = "Copied Key Link"
+    }
+  }
+})
+
+MinimizeButton({
+  Image = "rbxassetid://103775574267750",
+  Size = {40, 40},
+  Color = Color3.fromRGB(10, 10, 10),
+  Corner = true,
+  Stroke = true,
+  StrokeColor = Color3.fromHSV(0.5, 1, 1)  -- Hue: 180° for cyan
+})
+
+MakeNotifi({
+  Title = "Executed!",
+  Text = "Boom!✅",
+  Time = 5
+})
+
+-- Rename Read section to Important and add the buttons
+local Important = MakeTab({Name = "Zuyis Portal😜"})
+
+local Image = AddImageLabel(Important, {
+  Name = "FmcStore🔗",
+  Image = "rbxassetid://7229442422"
+})
+
+AddButton(Important, {
+  Name = "😵‍💫 No Ability Cooldown",
+  Callback = function()
+    local AbilityController = require(cloneref(game:GetService("ReplicatedStorage")).Controllers.AbilityController)
+    local OriginalAbilityCooldown; 
+    OriginalAbilityCooldown = hookfunction(AbilityController.AbilityCooldown, function(Self)
+      return
+    end)
+
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+      Title = "Join FmcStore Hub For Updates!",
+      Text = "No Cooldown Script Completed✅",
+      Button1 = "W Fmc!!",
+      Button2 = "W Fmc!!",
+      Duration = 90
+    })
+  end
+})
+
+AddButton(Important, {
+  Name = "GK Ball Expander⚽️",
+  Callback = function()
+   loadstring(game:HttpGet("https://pastebin.com/raw/T5m4nwPq"))()
+
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+      Title = "Join FmcStore Hub For Updates!",
+      Text = "GK Expander Completed✅",
+      Button1 = "W Fmc!",
+      Button2 = "W Fmc!",
+      Duration = 90
+    })
+  end
+})
