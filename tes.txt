@@ -4,79 +4,158 @@ local teams = game:GetService("Teams")
 local replicatedStorage = game:GetService("ReplicatedStorage")
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/PresidentZuyi/S/refs/heads/main/C"))()
 
+-- Modern Color Scheme
+local PRIMARY_COLOR = Color3.fromRGB(0, 150, 255)  -- Electric Blue
+local SECONDARY_COLOR = Color3.fromRGB(25, 25, 35)  -- Dark Navy
+local ACCENT_COLOR = Color3.fromRGB(0, 200, 255)   -- Cyan Accent
+local TEXT_COLOR = Color3.fromRGB(240, 240, 240)   -- Off White
+
 MakeWindow({
-  Hub = {
-    Title = "FmcStore Official Hub (¥)",
-    Animation = "Enjoy!🔥👀"
-  },
-  Key = {
-    KeySystem = true,
-    Title = "FmcStore Official Hub 😉🐐",
-    Description = "^ Blue Lock Rivals (Updated)^",
-    KeyLink = "https://discord.gg/72q5yvpfEJ",
-    Keys = {"Fmcexecutive", "Fmc", "123", "1", "28282"},
-    Notifi = {
-      Notifications = true,
-      CorrectKey = "Correct✅",
-      Incorrectkey = "False, Salah Tolol Passwordnya😡‼️",
-      CopyKeyLink = "Copied Key Link"
+    Hub = {
+        Title = "🔥 FmcStore Premium Hub 🔥",
+        Animation = "Modern Edition 🚀",
+        BackgroundColor = SECONDARY_COLOR,
+        HeaderColor = PRIMARY_COLOR,
+        TextColor = TEXT_COLOR
+    },
+    Key = {
+        KeySystem = true,
+        Title = "🔐 FmcStore Authentication",
+        Description = "✨ Premium Access Required ✨",
+        KeyLink = "https://discord.gg/72q5yvpfEJ",
+        Keys = {"Fmcexecutive", "Fmc", "123", "1", "28282"},
+        InputBoxColor = SECONDARY_COLOR,
+        ButtonColor = PRIMARY_COLOR,
+        TextColor = TEXT_COLOR,
+        Notifi = {
+            Notifications = true,
+            CorrectKey = "🎉 Access Granted! Welcome Premium User!",
+            Incorrectkey = "❌ Invalid Key - Please Try Again",
+            CopyKeyLink = "📋 Discord Link Copied!"
+        }
     }
-  }
 })
 
+-- Modern Minimize Button
 MinimizeButton({
-  Image = "rbxassetid://103775574267750",
-  Size = {40, 40},
-  Color = Color3.fromRGB(10, 10, 10),
-  Corner = true,
-  Stroke = true,
-  StrokeColor = Color3.fromHSV(0.5, 1, 1)  -- Hue: 180° for cyan
+    Image = "rbxassetid://103775574267750",
+    Size = {45, 45},
+    Color = SECONDARY_COLOR,
+    Corner = true,
+    Stroke = true,
+    StrokeColor = PRIMARY_COLOR,
+    HoverColor = ACCENT_COLOR
 })
 
+-- Premium Notification
 MakeNotifi({
-  Title = "Executed!",
-  Text = "Boom!✅",
-  Time = 5
+    Title = "⚡ Premium Executed!",
+    Text = "FmcStore Hub Activated Successfully! 🚀",
+    Time = 5,
+    BackgroundColor = SECONDARY_COLOR,
+    TextColor = TEXT_COLOR
 })
 
--- Rename Read section to Important and add the buttons
-local Important = MakeTab({Name = "Zuyis Portal😜"})
+-- Main Tab with Premium Styling
+local Important = MakeTab({
+    Name = "🚀 Premium Features",
+    Color = PRIMARY_COLOR,
+    Icon = "🔮"
+})
 
+-- Premium Header Image
 local Image = AddImageLabel(Important, {
-  Name = "FmcStore🔗",
-  Image = "rbxassetid://7229442422"
+    Name = "FmcStore Premium 🔮",
+    Image = "rbxassetid://7229442422",
+    Size = {200, 200},
+    Corner = true
+})
+
+-- Premium Feature Cards
+AddButton(Important, {
+    Name = "⚡ No Ability Cooldown",
+    Description = "Remove all ability cooldowns permanently",
+    Callback = function()
+        local AbilityController = require(cloneref(game:GetService("ReplicatedStorage")).Controllers.AbilityController)
+        local OriginalAbilityCooldown; 
+        OriginalAbilityCooldown = hookfunction(AbilityController.AbilityCooldown, function(Self)
+            return
+        end)
+
+        MakeNotifi({
+            Title = "✅ Cooldown Removed",
+            Text = "All abilities now have zero cooldown!",
+            Time = 5,
+            BackgroundColor = PRIMARY_COLOR
+        })
+    end
 })
 
 AddButton(Important, {
-  Name = "😵‍💫 No Ability Cooldown",
-  Callback = function()
-    local AbilityController = require(cloneref(game:GetService("ReplicatedStorage")).Controllers.AbilityController)
-    local OriginalAbilityCooldown; 
-    OriginalAbilityCooldown = hookfunction(AbilityController.AbilityCooldown, function(Self)
-      return
-    end)
+    Name = "🎯 GK Ball Expander",
+    Description = "Expand goalkeeper ball for better defense",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/T5m4nwPq"))()
 
-    game:GetService("StarterGui"):SetCore("SendNotification", {
-      Title = "Join FmcStore Hub For Updates!",
-      Text = "No Cooldown Script Completed✅",
-      Button1 = "W Fmc!!",
-      Button2 = "W Fmc!!",
-      Duration = 90
-    })
-  end
+        MakeNotifi({
+            Title = "✅ GK Expanded",
+            Text = "Goalkeeper ball expansion activated!",
+            Time = 5,
+            BackgroundColor = PRIMARY_COLOR
+        })
+    end
+})
+
+-- Additional Premium Features
+AddButton(Important, {
+    Name = "🌟 Auto Farm XP",
+    Description = "Automatically farm experience points",
+    Callback = function()
+        MakeNotifi({
+            Title = "🔧 Coming Soon",
+            Text = "This feature is in development!",
+            Time = 5,
+            BackgroundColor = SECONDARY_COLOR
+        })
+    end
 })
 
 AddButton(Important, {
-  Name = "GK Ball Expander⚽️",
-  Callback = function()
-   loadstring(game:HttpGet("https://pastebin.com/raw/T5m4nwPq"))()
+    Name = "💫 Speed Boost",
+    Description = "Increase movement speed",
+    Callback = function()
+        MakeNotifi({
+            Title = "🔧 Coming Soon",
+            Text = "This feature is in development!",
+            Time = 5,
+            BackgroundColor = SECONDARY_COLOR
+        })
+    end
+})
 
-    game:GetService("StarterGui"):SetCore("SendNotification", {
-      Title = "Join FmcStore Hub For Updates!",
-      Text = "GK Expander Completed✅",
-      Button1 = "W Fmc!",
-      Button2 = "W Fmc!",
-      Duration = 90
-    })
-  end
+-- Status Section
+local StatusSection = AddSection(Important, {
+    Name = "📊 System Status",
+    TextColor = ACCENT_COLOR
+})
+
+AddLabel(StatusSection, {
+    Text = "🟢 Script Status: Active",
+    Color = Color3.fromRGB(0, 255, 0)
+})
+
+AddLabel(StatusSection, {
+    Text = "🟡 Game: Blue Lock Rivals",
+    Color = Color3.fromRGB(255, 255, 0)
+})
+
+AddLabel(StatusSection, {
+    Text = "🔵 Version: Premium v2.0",
+    Color = ACCENT_COLOR
+})
+
+-- Footer
+AddParagraph(Important, {
+    "Thank you for using FmcStore Premium!",
+    "✨ Premium Quality Scripts ✨"
 })
