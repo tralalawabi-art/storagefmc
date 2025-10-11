@@ -1,0 +1,730 @@
+local Configs_HUB = {
+    Cor_Hub = Color3.fromRGB(20, 20, 25),
+    Cor_Options = Color3.fromRGB(35, 35, 45),
+    Cor_Stroke = Color3.fromRGB(0, 150, 255),
+    Cor_Text = Color3.fromRGB(240, 240, 240),
+    Cor_DarkText = Color3.fromRGB(180, 180, 190),
+    Cor_Accent = Color3.fromRGB(0, 150, 255),
+    Corner_Radius = UDim.new(0, 8),
+    Text_Font = Enum.Font.Gotham,
+    Text_Font_Bold = Enum.Font.GothamBold
+}
+
+local CoreGui = game:GetService("CoreGui")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
+-- Modern gradient function
+local function CreateGradient(parent, colors)
+    local gradient = Instance.new("UIGradient")
+    gradient.Rotation = 90
+    gradient.Color = ColorSequence.new(colors)
+    gradient.Parent = parent
+    return gradient
+end
+
+local function Create(instance, parent, props)
+    local new = Instance.new(instance, parent)
+    if props then
+        for prop, value in pairs(props) do
+            new[prop] = value
+        end
+    end
+    return new
+end
+
+local function SetProps(instance, props)
+    if instance and props then
+        for prop, value in pairs(props) do
+            instance[prop] = value
+        end
+    end
+    return instance
+end
+
+local function Corner(parent, props)
+    local new = Create("UICorner", parent)
+    new.CornerRadius = Configs_HUB.Corner_Radius
+    if props then
+        SetProps(new, props)
+    end
+    return new
+end
+
+local function Stroke(parent, props)
+    local new = Create("UIStroke", parent)
+    new.Color = Configs_HUB.Cor_Stroke
+    new.ApplyStrokeMode = "Border"
+    new.Thickness = 1
+    if props then
+        SetProps(new, props)
+    end
+    return new
+end
+
+local function CreateTween(instance, prop, value, time, tweenWait)
+    local tween = TweenService:Create(instance,
+    TweenInfo.new(time, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
+    {[prop] = value})
+    tween:Play()
+    if tweenWait then
+        tween.Completed:Wait()
+    end
+end
+
+-- Modern notification system
+local ScreenGui = Create("ScreenGui", CoreGui, {
+    Name = "FmcStorePremium",
+    ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+})
+
+ScreenFind = CoreGui:FindFirstChild(ScreenGui.Name)
+if ScreenFind and ScreenFind ~= ScreenGui then
+    ScreenFind:Destroy()
+end
+
+function DestroyScript()
+    ScreenGui:Destroy()
+end
+
+-- Modern notification panel
+local NotificationPanel = Create("Frame", ScreenGui, {
+    Size = UDim2.new(0, 350, 1, -20),
+    Position = UDim2.new(1, -10, 0, 10),
+    AnchorPoint = Vector2.new(1, 0),
+    BackgroundTransparency = 1,
+    ClipsDescendants = true
+})
+
+local NotificationLayout = Create("UIListLayout", NotificationPanel, {
+    Padding = UDim.new(0, 10),
+    VerticalAlignment = "Bottom"
+})
+
+function MakeNotifi(Configs)
+    local Title = Configs.Title or "FmcStore"
+    local Text = Configs.Text or "Notification"
+    local Time = Configs.Time or 5
+    
+    local Notification = Create("Frame", NotificationPanel, {
+        Size = UDim2.new(1, 0, 0, 0),
+        BackgroundColor3 = Configs_HUB.Cor_Options,
+        ClipsDescendants = true,
+        AutomaticSize = Enum.AutomaticSize.Y
+    })
+    Corner(Notification)
+    Stroke(Notification)
+    
+    -- Add gradient background
+    local GradientBg = Create("Frame", Notification, {
+        Size = UDim2.new(1, 0, 1, 0),
+        BackgroundTransparency = 0.9,
+        ZIndex = 0
+    })
+    CreateGradient(GradientBg, {
+        Color3.new(0.1, 0.1, 0.15),
+        Color3.new(0.08, 0.08, 0.12)
+    })
+    
+    local Content = Create("Frame", Notification, {
+        Size = UDim2.new(1, -20, 0, 0),
+        Position = UDim2.new(0, 10, 0, 10),
+        BackgroundTransparency = 1,
+        AutomaticSize = Enum.AutomaticSize.Y
+    })
+    
+    local TitleLabel = Create("TextLabel", Content, {
+        Size = UDim2.new(1, 0, 0, 25),
+        Text = Title,
+        TextColor3 = Configs_HUB.Cor_Text,
+        Font = Configs_HUB.Text_Font_Bold,
+        TextSize = 16,
+        TextXAlignment = "Left",
+        BackgroundTransparency = 1
+    })
+    
+    local MessageLabel = Create("TextLabel", Content, {
+        Size = UDim2.new(1, 0, 0, 0),
+        Position = UDim2.new(0, 0, 0, 25),
+        Text = Text,
+        TextColor3 = Configs_HUB.Cor_DarkText,
+        Font = Configs_HUB.Text_Font,
+        TextSize = 14,
+        TextXAlignment = "Left",
+        TextYAlignment = "Top",
+        TextWrapped = true,
+        BackgroundTransparency = 1,
+        AutomaticSize = Enum.AutomaticSize.Y
+    })
+    
+    local ProgressBar = Create("Frame", Notification, {
+        Size = UDim2.new(1, 0, 0, 3),
+        Position = UDim2.new(0, 0, 1, 0),
+        AnchorPoint = Vector2.new(0, 1),
+        BackgroundColor3 = Configs_HUB.Cor_Accent,
+        BorderSizePixel = 0
+    })
+    Corner(ProgressBar, {CornerRadius = UDim.new(0, 0)})
+    
+    -- Animate entrance
+    CreateTween(Notification, "Size", UDim2.new(1, 0, 0, Content.AbsoluteSize.Y + 20), 0.3, false)
+    
+    -- Animate progress bar
+    CreateTween(ProgressBar, "Size", UDim2.new(0, 0, 0, 3), Time, false)
+    
+    task.delay(Time, function()
+        CreateTween(Notification, "Size", UDim2.new(1, 0, 0, 0), 0.3, false)
+        task.wait(0.3)
+        Notification:Destroy()
+    end)
+end
+
+-- Modern key system
+function MakeWindow(Configs)
+    local title = Configs.Hub.Title or "FmcStore Premium"
+    local Anim_Title = Configs.Hub.Animation or "Premium Hub Loaded"
+    
+    local KeySystem = Configs.Key.KeySystem or false
+    local KeyTitle = Configs.Key.Title or "Premium Authentication"
+    local KeyDescription = Configs.Key.Description or "Enter your key to access premium features"
+    local KeyKey = Configs.Key.Keys or {"Fmcexecutive", "Fmc", "123", "1", "28282"}
+    local KeyLink = Configs.Key.KeyLink or "https://discord.gg/72q5yvpfEJ"
+    local KeyNotifications = Configs.Key.Notifi.Notifications or true
+    local KeyNotSuccess = Configs.Key.Notifi.Incorrectkey or "Invalid key"
+    local KeySuccess = Configs.Key.Notifi.CorrectKey or "Authentication successful!"
+    local KeyCopyKeyLink = Configs.Key.Notifi.CopyKeyLink or "Discord link copied!"
+
+    if KeySystem then
+        local KeyOverlay = Create("Frame", ScreenGui, {
+            Size = UDim2.new(1, 0, 1, 0),
+            BackgroundColor3 = Color3.new(0, 0, 0),
+            BackgroundTransparency = 0.3,
+            ZIndex = 10
+        })
+        
+        local KeyModal = Create("Frame", KeyOverlay, {
+            Size = UDim2.new(0, 400, 0, 280),
+            Position = UDim2.new(0.5, 0, 0.5, 0),
+            AnchorPoint = Vector2.new(0.5, 0.5),
+            BackgroundColor3 = Configs_HUB.Cor_Hub,
+            ClipsDescendants = true
+        })
+        Corner(KeyModal)
+        Stroke(KeyModal)
+        
+        -- Gradient background
+        local ModalGradient = Create("Frame", KeyModal, {
+            Size = UDim2.new(1, 0, 1, 0),
+            BackgroundTransparency = 0.1,
+            ZIndex = 0
+        })
+        CreateGradient(ModalGradient, {
+            Color3.new(0.15, 0.15, 0.2),
+            Color3.new(0.1, 0.1, 0.15)
+        })
+        
+        local Header = Create("Frame", KeyModal, {
+            Size = UDim2.new(1, 0, 0, 60),
+            BackgroundTransparency = 1
+        })
+        
+        local TitleLabel = Create("TextLabel", Header, {
+            Size = UDim2.new(1, -40, 1, 0),
+            Position = UDim2.new(0, 20, 0, 0),
+            Text = KeyTitle,
+            TextColor3 = Configs_HUB.Cor_Text,
+            Font = Configs_HUB.Text_Font_Bold,
+            TextSize = 20,
+            TextXAlignment = "Left",
+            BackgroundTransparency = 1
+        })
+        
+        local CloseBtn = Create("TextButton", Header, {
+            Size = UDim2.new(0, 30, 0, 30),
+            Position = UDim2.new(1, -10, 0, 10),
+            AnchorPoint = Vector2.new(1, 0),
+            Text = "×",
+            TextColor3 = Configs_HUB.Cor_DarkText,
+            Font = Enum.Font.GothamBold,
+            TextSize = 20,
+            BackgroundTransparency = 1
+        })
+        
+        local DescLabel = Create("TextLabel", KeyModal, {
+            Size = UDim2.new(1, -40, 0, 40),
+            Position = UDim2.new(0, 20, 0, 60),
+            Text = KeyDescription,
+            TextColor3 = Configs_HUB.Cor_DarkText,
+            Font = Configs_HUB.Text_Font,
+            TextSize = 14,
+            TextXAlignment = "Left",
+            TextWrapped = true,
+            BackgroundTransparency = 1
+        })
+        
+        local KeyInput = Create("TextBox", KeyModal, {
+            Size = UDim2.new(1, -40, 0, 45),
+            Position = UDim2.new(0, 20, 0, 110),
+            BackgroundColor3 = Configs_HUB.Cor_Options,
+            PlaceholderText = "Enter your key here...",
+            PlaceholderColor3 = Color3.new(0.5, 0.5, 0.5),
+            TextColor3 = Configs_HUB.Cor_Text,
+            Font = Configs_HUB.Text_Font,
+            TextSize = 16,
+            ClearTextOnFocus = false
+        })
+        Corner(KeyInput)
+        Stroke(KeyInput)
+        
+        local ButtonContainer = Create("Frame", KeyModal, {
+            Size = UDim2.new(1, -40, 0, 45),
+            Position = UDim2.new(0, 20, 1, -65),
+            AnchorPoint = Vector2.new(0, 1),
+            BackgroundTransparency = 1
+        })
+        
+        local GetKeyBtn = Create("TextButton", ButtonContainer, {
+            Size = UDim2.new(0.45, 0, 1, 0),
+            Position = UDim2.new(0, 0, 0, 0),
+            Text = "GET KEY",
+            TextColor3 = Configs_HUB.Cor_Text,
+            Font = Configs_HUB.Text_Font_Bold,
+            TextSize = 14,
+            BackgroundColor3 = Configs_HUB.Cor_Options
+        })
+        Corner(GetKeyBtn)
+        Stroke(GetKeyBtn)
+        
+        local AuthBtn = Create("TextButton", ButtonContainer, {
+            Size = UDim2.new(0.45, 0, 1, 0),
+            Position = UDim2.new(1, 0, 0, 0),
+            AnchorPoint = Vector2.new(1, 0),
+            Text = "AUTHENTICATE",
+            TextColor3 = Color3.new(1, 1, 1),
+            Font = Configs_HUB.Text_Font_Bold,
+            TextSize = 14,
+            BackgroundColor3 = Configs_HUB.Cor_Accent
+        })
+        Corner(AuthBtn)
+        
+        -- Button hover effects
+        local function SetupButtonHover(button, isAccent)
+            button.MouseEnter:Connect(function()
+                CreateTween(button, "BackgroundTransparency", 0.2, 0.2, false)
+            end)
+            button.MouseLeave:Connect(function()
+                CreateTween(button, "BackgroundTransparency", 0, 0.2, false)
+            end)
+        end
+        
+        SetupButtonHover(GetKeyBtn, false)
+        SetupButtonHover(AuthBtn, true)
+        
+        local KeyVerified = false
+        
+        CloseBtn.MouseButton1Click:Connect(function()
+            CreateTween(KeyModal, "Size", UDim2.new(0, 0, 0, 0), 0.3, false)
+            CreateTween(KeyOverlay, "BackgroundTransparency", 1, 0.3, true)
+            KeyOverlay:Destroy()
+        end)
+        
+        AuthBtn.MouseButton1Click:Connect(function()
+            local inputKey = KeyInput.Text
+            local valid = false
+            
+            for _, key in pairs(KeyKey) do
+                if inputKey == key then
+                    valid = true
+                    break
+                end
+            end
+            
+            if valid then
+                KeyVerified = true
+                if KeyNotifications then
+                    MakeNotifi({
+                        Title = "Success",
+                        Text = KeySuccess,
+                        Time = 3
+                    })
+                end
+                CreateTween(KeyModal, "Size", UDim2.new(0, 0, 0, 0), 0.3, false)
+                CreateTween(KeyOverlay, "BackgroundTransparency", 1, 0.3, true)
+                KeyOverlay:Destroy()
+            else
+                if KeyNotifications then
+                    MakeNotifi({
+                        Title = "Error",
+                        Text = KeyNotSuccess,
+                        Time = 3
+                    })
+                end
+                -- Shake animation for wrong key
+                for i = 1, 3 do
+                    CreateTween(KeyInput, "Position", UDim2.new(0, 25, 0, 110), 0.05, true)
+                    CreateTween(KeyInput, "Position", UDim2.new(0, 15, 0, 110), 0.05, true)
+                end
+                CreateTween(KeyInput, "Position", UDim2.new(0, 20, 0, 110), 0.1, false)
+            end
+        end)
+        
+        GetKeyBtn.MouseButton1Click:Connect(function()
+            setclipboard(KeyLink)
+            if KeyNotifications then
+                MakeNotifi({
+                    Title = "Discord",
+                    Text = KeyCopyKeyLink,
+                    Time = 3
+                })
+            end
+        end)
+        
+        -- Animate modal entrance
+        KeyModal.Size = UDim2.new(0, 0, 0, 0)
+        CreateTween(KeyModal, "Size", UDim2.new(0, 400, 0, 280), 0.5, false)
+        
+        repeat task.wait() until KeyVerified
+    end
+    
+    -- Modern main window
+    local MainWindow = Create("Frame", ScreenGui, {
+        Size = UDim2.new(0, 550, 0, 400),
+        Position = UDim2.new(0.5, -275, 0.5, -200),
+        BackgroundColor3 = Configs_HUB.Cor_Hub,
+        Active = true,
+        Draggable = true,
+        ClipsDescendants = true
+    })
+    Corner(MainWindow)
+    Stroke(MainWindow)
+    
+    -- Window background with gradient
+    local WindowBg = Create("Frame", MainWindow, {
+        Size = UDim2.new(1, 0, 1, 0),
+        BackgroundTransparency = 0.1,
+        ZIndex = 0
+    })
+    CreateGradient(WindowBg, {
+        Color3.new(0.12, 0.12, 0.16),
+        Color3.new(0.08, 0.08, 0.12)
+    })
+    
+    -- Modern header
+    local Header = Create("Frame", MainWindow, {
+        Size = UDim2.new(1, 0, 0, 50),
+        BackgroundTransparency = 1
+    })
+    
+    local Title = Create("TextLabel", Header, {
+        Size = UDim2.new(1, -100, 1, 0),
+        Position = UDim2.new(0, 15, 0, 0),
+        Text = title,
+        TextColor3 = Configs_HUB.Cor_Text,
+        Font = Configs_HUB.Text_Font_Bold,
+        TextSize = 18,
+        TextXAlignment = "Left",
+        BackgroundTransparency = 1
+    })
+    
+    local WindowButtons = Create("Frame", Header, {
+        Size = UDim2.new(0, 80, 1, 0),
+        Position = UDim2.new(1, -5, 0, 0),
+        AnchorPoint = Vector2.new(1, 0),
+        BackgroundTransparency = 1
+    })
+    
+    local MinimizeBtn = Create("TextButton", WindowButtons, {
+        Size = UDim2.new(0, 30, 0, 30),
+        Position = UDim2.new(0, 0, 0.5, 0),
+        AnchorPoint = Vector2.new(0, 0.5),
+        Text = "_",
+        TextColor3 = Configs_HUB.Cor_Text,
+        Font = Enum.Font.GothamBold,
+        TextSize = 16,
+        BackgroundTransparency = 1
+    })
+    
+    local CloseBtn = Create("TextButton", WindowButtons, {
+        Size = UDim2.new(0, 30, 0, 30),
+        Position = UDim2.new(1, 0, 0.5, 0),
+        AnchorPoint = Vector2.new(1, 0.5),
+        Text = "×",
+        TextColor3 = Configs_HUB.Cor_Text,
+        Font = Enum.Font.GothamBold,
+        TextSize = 18,
+        BackgroundTransparency = 1
+    })
+    
+    -- Sidebar for tabs
+    local Sidebar = Create("Frame", MainWindow, {
+        Size = UDim2.new(0, 150, 1, -50),
+        Position = UDim2.new(0, 0, 0, 50),
+        BackgroundTransparency = 1
+    })
+    
+    local TabContainer = Create("Frame", MainWindow, {
+        Size = UDim2.new(1, -150, 1, -50),
+        Position = UDim2.new(0, 150, 0, 50),
+        BackgroundTransparency = 1,
+        ClipsDescendants = true
+    })
+    
+    local TabButtons = Create("ScrollingFrame", Sidebar, {
+        Size = UDim2.new(1, 0, 1, 0),
+        BackgroundTransparency = 1,
+        ScrollBarThickness = 2,
+        CanvasSize = UDim2.new(0, 0, 0, 0),
+        AutomaticCanvasSize = Enum.AutomaticSize.Y
+    })
+    
+    local TabLayout = Create("UIListLayout", TabButtons, {
+        Padding = UDim.new(0, 5)
+    })
+    
+    local TabPadding = Create("UIPadding", TabButtons, {
+        PaddingLeft = UDim.new(0, 10),
+        PaddingTop = UDim.new(0, 10)
+    })
+    
+    local CurrentTab = nil
+    
+    -- Window control functions
+    local IsMinimized = false
+    MinimizeBtn.MouseButton1Click:Connect(function()
+        IsMinimized = not IsMinimized
+        if IsMinimized then
+            CreateTween(MainWindow, "Size", UDim2.new(0, 550, 0, 50), 0.3, false)
+        else
+            CreateTween(MainWindow, "Size", UDim2.new(0, 550, 0, 400), 0.3, false)
+        end
+    end)
+    
+    CloseBtn.MouseButton1Click:Connect(function()
+        CreateTween(MainWindow, "Size", UDim2.new(0, 0, 0, 0), 0.3, false)
+        task.wait(0.3)
+        DestroyScript()
+    end)
+    
+    -- Modern tab system
+    function MakeTab(Configs)
+        local TabName = Configs.Name or "Tab"
+        
+        local TabButton = Create("TextButton", TabButtons, {
+            Size = UDim2.new(1, -20, 0, 40),
+            Text = "",
+            BackgroundColor3 = Configs_HUB.Cor_Options,
+            AutoButtonColor = false
+        })
+        Corner(TabButton)
+        
+        local ButtonLabel = Create("TextLabel", TabButton, {
+            Size = UDim2.new(1, 0, 1, 0),
+            Text = TabName,
+            TextColor3 = Configs_HUB.Cor_DarkText,
+            Font = Configs_HUB.Text_Font,
+            TextSize = 14,
+            BackgroundTransparency = 1
+        })
+        
+        local TabContent = Create("ScrollingFrame", TabContainer, {
+            Size = UDim2.new(1, 0, 1, 0),
+            BackgroundTransparency = 1,
+            ScrollBarThickness = 3,
+            Visible = false,
+            CanvasSize = UDim2.new(0, 0, 0, 0),
+            AutomaticCanvasSize = Enum.AutomaticSize.Y
+        })
+        
+        local ContentLayout = Create("UIListLayout", TabContent, {
+            Padding = UDim.new(0, 10)
+        })
+        
+        local ContentPadding = Create("UIPadding", TabContent, {
+            PaddingLeft = UDim.new(0, 15),
+            PaddingTop = UDim.new(0, 15),
+            PaddingRight = UDim.new(0, 15)
+        })
+        
+        -- Tab button hover effects
+        TabButton.MouseEnter:Connect(function()
+            if TabContent.Visible == false then
+                CreateTween(TabButton, "BackgroundColor3", Color3.new(0.3, 0.3, 0.4), 0.2, false)
+            end
+        end)
+        
+        TabButton.MouseLeave:Connect(function()
+            if TabContent.Visible == false then
+                CreateTween(TabButton, "BackgroundColor3", Configs_HUB.Cor_Options, 0.2, false)
+            end
+        end)
+        
+        TabButton.MouseButton1Click:Connect(function()
+            if CurrentTab then
+                CurrentTab.Visible = false
+                CreateTween(CurrentTab.TabButton, "BackgroundColor3", Configs_HUB.Cor_Options, 0.2, false)
+                CreateTween(CurrentTab.ButtonLabel, "TextColor3", Configs_HUB.Cor_DarkText, 0.2, false)
+            end
+            
+            CurrentTab = TabContent
+            TabContent.Visible = true
+            CreateTween(TabButton, "BackgroundColor3", Configs_HUB.Cor_Accent, 0.2, false)
+            CreateTween(ButtonLabel, "TextColor3", Configs_HUB.Cor_Text, 0.2, false)
+        end)
+        
+        -- Set as first tab if none selected
+        if not CurrentTab then
+            CurrentTab = TabContent
+            TabContent.Visible = true
+            TabButton.BackgroundColor3 = Configs_HUB.Cor_Accent
+            ButtonLabel.TextColor3 = Configs_HUB.Cor_Text
+        end
+        
+        return TabContent
+    end
+    
+    -- Modern button function
+    function AddButton(parent, Configs)
+        local ButtonName = Configs.Name or "Button"
+        local Callback = Configs.Callback or function() end
+        
+        local Button = Create("TextButton", parent, {
+            Size = UDim2.new(1, 0, 0, 45),
+            Text = "",
+            BackgroundColor3 = Configs_HUB.Cor_Options,
+            AutoButtonColor = false
+        })
+        Corner(Button)
+        Stroke(Button)
+        
+        local ButtonContent = Create("Frame", Button, {
+            Size = UDim2.new(1, -20, 1, -10),
+            Position = UDim2.new(0, 10, 0, 5),
+            BackgroundTransparency = 1
+        })
+        
+        local Icon = Create("ImageLabel", ButtonContent, {
+            Size = UDim2.new(0, 25, 0, 25),
+            Position = UDim2.new(0, 0, 0.5, 0),
+            AnchorPoint = Vector2.new(0, 0.5),
+            Image = "rbxassetid://10734948820", -- Modern icon
+            BackgroundTransparency = 1,
+            ImageColor3 = Configs_HUB.Cor_Accent
+        })
+        
+        local Label = Create("TextLabel", ButtonContent, {
+            Size = UDim2.new(1, -35, 1, 0),
+            Position = UDim2.new(0, 35, 0, 0),
+            Text = ButtonName,
+            TextColor3 = Configs_HUB.Cor_Text,
+            Font = Configs_HUB.Text_Font,
+            TextSize = 14,
+            TextXAlignment = "Left",
+            BackgroundTransparency = 1
+        })
+        
+        -- Hover effects
+        Button.MouseEnter:Connect(function()
+            CreateTween(Button, "BackgroundColor3", Color3.new(0.4, 0.4, 0.5), 0.2, false)
+            CreateTween(Button, "Position", UDim2.new(0, 0, 0, -2), 0.2, false)
+        end)
+        
+        Button.MouseLeave:Connect(function()
+            CreateTween(Button, "BackgroundColor3", Configs_HUB.Cor_Options, 0.2, false)
+            CreateTween(Button, "Position", UDim2.new(0, 0, 0, 0), 0.2, false)
+        end)
+        
+        Button.MouseButton1Click:Connect(function()
+            CreateTween(Button, "BackgroundColor3", Configs_HUB.Cor_Accent, 0.1, false)
+            task.wait(0.1)
+            CreateTween(Button, "BackgroundColor3", Color3.new(0.4, 0.4, 0.5), 0.1, false)
+            Callback()
+        end)
+        
+        return Button
+    end
+    
+    -- Add sections function
+    function AddSection(parent, Configs)
+        local SectionName = Configs.Name or "Section"
+        
+        local Section = Create("Frame", parent, {
+            Size = UDim2.new(1, 0, 0, 40),
+            BackgroundTransparency = 1
+        })
+        
+        local SectionLabel = Create("TextLabel", Section, {
+            Size = UDim2.new(1, 0, 1, 0),
+            Text = string.upper(SectionName),
+            TextColor3 = Configs_HUB.Cor_Accent,
+            Font = Configs_HUB.Text_Font_Bold,
+            TextSize = 12,
+            TextXAlignment = "Left",
+            BackgroundTransparency = 1
+        })
+        
+        local Line = Create("Frame", Section, {
+            Size = UDim2.new(1, 0, 0, 1),
+            Position = UDim2.new(0, 0, 1, 0),
+            BackgroundColor3 = Configs_HUB.Cor_Stroke,
+            BackgroundTransparency = 0.5
+        })
+        
+        return Section
+    end
+    
+    -- Animation on load
+    MainWindow.Size = UDim2.new(0, 0, 0, 0)
+    CreateTween(MainWindow, "Size", UDim2.new(0, 550, 0, 400), 0.5, false)
+    
+    MakeNotifi({
+        Title = "FmcStore Premium",
+        Text = Anim_Title,
+        Time = 3
+    })
+    
+    return {
+        MakeTab = MakeTab,
+        AddButton = AddButton,
+        AddSection = AddSection,
+        MakeNotifi = MakeNotifi
+    }
+end
+
+-- Modern minimize button
+function MinimizeButton(Configs)
+    local image = Configs.Image or "rbxassetid://10734948820"
+    local size = Configs.Size or {50, 50}
+    local color = Configs.Color or Configs_HUB.Cor_Options
+    
+    local MinimizeBtn = Create("ImageButton", ScreenGui, {
+        Size = UDim2.new(0, size[1], 0, size[2]),
+        Position = UDim2.new(0, 20, 0, 20),
+        BackgroundColor3 = color,
+        Image = image,
+        ImageColor3 = Configs_HUB.Cor_Accent
+    })
+    Corner(MinimizeBtn)
+    Stroke(MinimizeBtn)
+    
+    local minimized = false
+    MinimizeBtn.MouseButton1Click:Connect(function()
+        -- This would need reference to the main window
+        -- Implementation depends on your specific needs
+    end)
+    
+    return MinimizeBtn
+end
+
+-- Initialize with example usage
+MakeNotifi({
+    Title = "FmcStore Premium",
+    Text = "Modern UI Library Loaded Successfully!",
+    Time = 5
+})
+
+return {
+    MakeWindow = MakeWindow,
+    MakeNotifi = MakeNotifi,
+    MinimizeButton = MinimizeButton
+}
